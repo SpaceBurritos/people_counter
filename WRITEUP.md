@@ -8,9 +8,11 @@ questions.
 
 The process behind converting custom layers involves...
 
-Some of the potential reasons for handling custom layers are...
+Some of the potential reasons for handling custom layers are for handling layers that are not among the built-in layers
 
 ## Comparing Model Performance
+
+The model that I chose was the SSD Mobilenet v2, that i downloaded from https://github.com/tensorflow/models/blob/master/research/object_detection/g3doc/detection_model_zoo.md
 
 My method(s) to compare models before and after conversion to Intermediate Representations
 were to see the difference in the models accuracy, size, and inference time. For the case of the accuracy
