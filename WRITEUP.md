@@ -13,9 +13,9 @@ Some of the potential reasons for handling custom layers are for handling layers
 ## Comparing Model Performance
 
 The model that I chose was the SSD Mobilenet v2, that i downloaded from https://github.com/tensorflow/models/blob/master/research/object_detection/g3doc/detection_model_zoo.md, the link to the model is http://download.tensorflow.org/models/object_detection/ssd_mobilenet_v2_coco_2018_03_29.tar.gz. And the model was converted to the IR representation using the next command line:
-'''
+```
 python /opt/intel/openvino/deployment_tools/model_optimizer/mo.py --input_model frozen_inference_graph.pb --tensorflow_object_detection_api_pipeline_config pipeline.config --reverse_input_channels --tensorflow_use_custom_operations_config /opt/intel/openvino/deployment_tools/model_optimizer/extensions/front/tf/ssd_v2_support.json
-'''
+```
 
 My method(s) to compare models before and after conversion to Intermediate Representations
 were to see the difference in the models accuracy, size, and inference time. For the case of the accuracy
