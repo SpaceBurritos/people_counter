@@ -6,13 +6,21 @@ questions.
 
 ## Explaining Custom Layers
 
-The process behind converting custom layers involves...
+As mentioned in the Intel(r) Edge AI for IoT Developers Nanodegree Program from Udacity: "Custom layers are those outside of the list of known, supported layers, and are typically a rare exception. Handling custom layers in a neural network for use with the Model Optimizer depends somewhat on the framework used; other than adding the custom layer as an extension, you otherwise have to follow instructions specific to the framework."
+Some of the specific instructions that need to be follow are:
+1. For Tensorflow, replace the unsupported subgraph with a different subgraph.
+2. For Caffe, register the layers as Custom layers, and use Caffe to calculate the output shape
 
-Some of the potential reasons for handling custom layers are for handling layers that are not among the built-in layers
 
 ## Comparing Model Performance
 
-The model that I chose was the SSD Mobilenet v2, that i downloaded from https://github.com/tensorflow/models/blob/master/research/object_detection/g3doc/detection_model_zoo.md, the link to the model is http://download.tensorflow.org/models/object_detection/ssd_mobilenet_v2_coco_2018_03_29.tar.gz. And the model was converted to the IR representation using the next command line:
+The model that I chose was the SSD Mobilenet v2, that i downloaded from https://github.com/tensorflow/models/blob/master/research/object_detection/g3doc/detection_model_zoo.md, the link to the model is http://download.tensorflow.org/models/object_detection/ssd_mobilenet_v2_coco_2018_03_29.tar.gz. 
+After downloading the model use the next command:
+```
+tar -xvf ssd_mobilenet_v2_coco_2018_03_29.tar.gz
+```
+
+And the model was converted to the IR representation using the next command line:
 ```
 python /opt/intel/openvino/deployment_tools/model_optimizer/mo.py --input_model frozen_inference_graph.pb --tensorflow_object_detection_api_pipeline_config pipeline.config --reverse_input_channels --tensorflow_use_custom_operations_config /opt/intel/openvino/deployment_tools/model_optimizer/extensions/front/tf/ssd_v2_support.json
 ```
@@ -30,13 +38,11 @@ The inference time of the model pre- and post-conversion was 0.8 s before and 0.
 
 ## Assess Model Use Cases
 
-Some of the potential use cases of the people counter app are knowing the amount of people that are inside a building, 
+Some of the potential use cases of the people counter app are knowing the amount of people that are inside a building, or even crossing a bridge or riding an elevator this forsafety measurements; checking the amount of people in a place and a given time, this for the purpose of knowing the growth of a place and its most popular hours. Also, this could be use in places like roller coasters for knowing if the minimum amount of people are in the attraction, and if combined with a face recognition model it can also be used in theaters and movie theaters, to know attendance ratio and to check if the seats are being used by their respective buyers
 
-
-Each of these use cases would be useful because...
 
 ## Assess Effects on End User Needs
 
 Lighting, model accuracy, and camera focal length/image size have different effects on a
-deployed edge model. The potential effects of each of these are as follows...
+deployed edge model. All these variations affect the final model accuracy, because they distort the way that the target (in this case, people) looks and in general makes the whole image less clear.
 
