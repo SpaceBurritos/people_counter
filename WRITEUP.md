@@ -12,7 +12,7 @@ Some of the potential reasons for handling custom layers are for handling layers
 
 ## Comparing Model Performance
 
-The model that I chose was the SSD Mobilenet v2, that i downloaded from https://github.com/tensorflow/models/blob/master/research/object_detection/g3doc/detection_model_zoo.md
+The model that I chose was the SSD Mobilenet v2, that i downloaded from https://github.com/tensorflow/models/blob/master/research/object_detection/g3doc/detection_model_zoo.md, the link to the model is http://download.tensorflow.org/models/object_detection/ssd_mobilenet_v2_coco_2018_03_29.tar.gz
 
 My method(s) to compare models before and after conversion to Intermediate Representations
 were to see the difference in the models accuracy, size, and inference time. For the case of the accuracy
