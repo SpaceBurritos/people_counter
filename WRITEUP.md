@@ -13,7 +13,9 @@ Some of the potential reasons for handling custom layers are...
 ## Comparing Model Performance
 
 My method(s) to compare models before and after conversion to Intermediate Representations
-were...
+were to see the difference in the models accuracy, size, and inference time. For the case of the accuracy
+I got the number of frames where there was a person on the screen and compared it to the number of frames
+the model infered that there was a person
 
 The difference between model accuracy pre- and post-conversion was 76% and 69%, that is a 7% difference in accuracy
 
@@ -23,7 +25,8 @@ The inference time of the model pre- and post-conversion was 0.8 s before and 0.
 
 ## Assess Model Use Cases
 
-Some of the potential use cases of the people counter app are...
+Some of the potential use cases of the people counter app are knowing the amount of people that are inside a building, 
+
 
 Each of these use cases would be useful because...
 
