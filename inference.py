@@ -50,6 +50,14 @@ class Network:
         
         self.plugin = IECore()
         ### TODO: Check for supported layers ###
+        
+        #supported_layers = self.plugin.query_network(network=self.network, device_name=device)
+        #
+        #unsupported_layers = [l for l in self.network.layers.keys() if l not in supported_layers]
+        #if len(unsupported_layers) != 0:
+        #    print("Unsupported layers found: {}".format(unsupported_layers))
+        #    print("Check whether extensions are available to add to IECore.")
+        #    exit(1)
         ### TODO: Add any necessary extensions ###
         if cpu_extension and "CPU" in device:
             self.plugin.add_extension(cpu_extension, device)
@@ -65,20 +73,24 @@ class Network:
         ### TODO: Return the shape of the input layer ###
         return self.network.inputs[self.input_blob].shape
 
-    def exec_net(self, image):
+    def exec_net(self, request_id, image):
         ### TODO: Start an asynchronous request ###
-        self.exec_network.start_async(request_id=0, inputs={self.input_blob: image})
         ### TODO: Return any necessary information ###
         ### Note: You may need to update the function parameters. ###
-        return
+        self.infer_request = self.exec_network.start_async(
+            request_id=request_id, inputs={self.input_blob: image})
 
-    def wait(self):
+        return self.exec_network
+
+    def wait(self, request_id=0):
         ### TODO: Wait for the request to be complete. ###
         ### TODO: Return any necessary information ###
         ### Note: You may need to update the function parameters. ###
-        return self.exec_network.requests[0].wait(-1)
+        return self.exec_network.requests[request_id].wait(-1)
 
-    def get_output(self):
+    def get_output(self, request_id):       
         ### TODO: Extract and return the output results
         ### Note: You may need to update the function parameters. ###
-        return self.exec_network.requests[0].outputs[self.output_blob]
+
+        result = self.exec_network.requests[request_id].outputs[self.output_blob]
+        return result
