@@ -28,6 +28,7 @@ And to run the model I used the following command:
 ```
 python3.5 main.py -d MYRIAD -i resources/Pedestrian_Detect_2_1_1.mp4 -m your-model.xml -pt 0.3 | ffmpeg -v warning -f rawvideo -pixel_format bgr24 -video_size 768x432 -framerate 24 -i - http://0.0.0.0:3004/fac.ffm
 ```
+The threshold argument was change to 0.3 because the default value of 0.6 didn't register one of the persons on the video 
 
 My method(s) to compare models before and after conversion to Intermediate Representations
 were to see the difference in the models accuracy, size, and inference time. For the case of the accuracy
