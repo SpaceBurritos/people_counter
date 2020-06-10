@@ -111,12 +111,34 @@ def infer_on_stream(args, client):
     
     infer_network.load_model(args.model, args.device, args.cpu_extension)
     
+    
+    
     ### TODO: Handle the input stream ###
-    cap = cv2.VideoCapture(args.input)
-    cap.open(args.input)
+    single_image_mode = False
+    
+    if args.input == 'CAM':
+        input_validated = 0
+
+    # Checks for input image
+    elif args.input.endswith('.jpg') or args.input.endswith('.bmp') :
+        single_image_mode = True
+        input_validated = args.input
+
+    # Checks for video file
+    else:
+        input_validated = args.input
+        assert os.path.isfile(args.input), "file doesn't exist"
+    
+    cap = cv2.VideoCapture(input_validated)
+    cap.open(input_validated)
     width = int(cap.get(3))
     height = int(cap.get(4))
+    
+    
+    request = 0
     net_input_shape = infer_network.get_input_shape()
+    
+    
     total_count = 0
     current_count = 0
     frame_tol = 15
@@ -137,12 +159,12 @@ def infer_on_stream(args, client):
 
         ### TODO: Start asynchronous inference for specified request ###
         start_infer_time = time.time()
-        infer_network.exec_net(p_frame)
+        infer_network.exec_net(request, p_frame)
        
         ### TODO: Wait for the result ###
-        if infer_network.wait() == 0:
+        if infer_network.wait(request) == 0:
             ### TODO: Get the results of the inference request ###
-            result = infer_network.get_output()
+            result = infer_network.get_output(request)
             output, person_in_frame = draw_boxes(frame, result, prob_threshold, width, height)
             end_infer_time = time.time()
             if person_in_frame:
@@ -164,7 +186,7 @@ def infer_on_stream(args, client):
                     final_time = time.time()
                 else:
                     if current_count != 0:
-                        client.publish("person/duration", json.dumps({"duration": temp_duration}))
+                        client.publish("person/duration", json.dumps({"duration": time.time() - start_time}))
                     current_count = 0
                     start_time = 0
                     final_time = 0
@@ -174,7 +196,7 @@ def infer_on_stream(args, client):
             #current_count, frame_tol, duration, total_count = count_people(person_in_frame, frame_tol, duration, total_count, current_count)
             ### TODO: Extract any desired stats from the results ###
             cv2.putText(output, str(positives/total_people_frames*100)+"%", (15, 15), cv2.FONT_HERSHEY_COMPLEX, 0.5, (0,0,255), True)
-            cv2.putText(output, str(end_infer_time - start_infer_time), (15, 30), cv2.FONT_HERSHEY_COMPLEX, 0.5, (0,0,255), True)
+            cv2.putText(output, str(time.time() - start_time), (15, 30), cv2.FONT_HERSHEY_COMPLEX, 0.5, (0,0,255), True)
             ### TODO: Calculate and send relevant information on ###
             ### current_count, total_count and duration to the MQTT server ###
             ### Topic "person": keys of "count" and "total" ###
@@ -185,7 +207,8 @@ def infer_on_stream(args, client):
         sys.stdout.buffer.write(output)
         sys.stdout.flush()
         ### TODO: Write an output image if `single_image_mode` ###
-
+        if single_image_mode:
+            cv2.imwrite('output_img.jpg', output)
 
 def main():
     """
