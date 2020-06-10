@@ -34,7 +34,7 @@ were to see the difference in the models accuracy, size, and inference time. For
 I got the number of frames where there was a person on the screen and compared it to the number of frames
 the model infered that there was a person
 
-The difference between model accuracy pre- and post-conversion was 76% and 69%, that is a 7% difference in accuracy
+The difference between model accuracy pre- and post-conversion was 95% and 92%, that is a 3% difference in accuracy
 
 The size of the model pre- and post-conversion was 66.4 MB before and 64.2 MB after, which is a 2.2 MB difference
 
